@@ -4,13 +4,16 @@ import {configureStore, createSlice} from "@reduxjs/toolkit";
 const moviesSlice = createSlice({
     name:'movie',
     initialState: [],
-    reducers: {
+    reducers: { //actions
         addMovie(state, action){
             state.push(action.payload)
         },
         removeMovie(state, action){
             const index = state.indexOf(action.payload);
             state.splice(index, 1);
+        },
+        reset(state, action){
+            return []; //cannot do state = [];
         }
     }
 })
@@ -29,6 +32,12 @@ const songsSlice = createSlice({
             const index = state.indexOf(action.payload);
             state.splice(index,1);
         }
+    },
+    extraReducers: (builder) => {
+        //watches for movie/reset action to reset state of song array
+        builder.addCase(moviesSlice.actions.reset, (state, action) => {
+            return []; //sets state to empty
+        })
     }
 })
 
@@ -56,4 +65,4 @@ export {store};
 
 //export action creator -> SongPlaylist component
 export const {addSong, removeSong} = songsSlice.actions;
-export const {addMovie, removeMovie} = moviesSlice.actions;
+export const {addMovie, removeMovie, reset} = moviesSlice.actions;
